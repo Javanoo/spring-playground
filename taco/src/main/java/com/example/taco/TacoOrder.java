@@ -4,7 +4,10 @@ import java.util.List;
 
 import org.hibernate.validator.constraints.CreditCardNumber;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
+
 import lombok.Data;
 
 import jakarta.validation.constraints.NotBlank;
@@ -12,7 +15,13 @@ import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Pattern;
 
 @Data
-public class TacoOrder {
+public class TacoOrder implements Serializable{
+
+	private static final long serialVersionUID = 619226869520249012L;
+	
+	private Long orderId;
+	
+	public Date datePlaced;
 
 	@NotBlank(message="Delivery name is requied")
 	private String deliveryName;
