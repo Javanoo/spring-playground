@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -24,6 +25,12 @@ import lombok.extern.slf4j.Slf4j;
 @SessionAttributes("tacoOrder")
 public class DesignTacoController {
 	
+	private IngredientRepository ingredientRepo;
+	
+	@Autowired
+	public DesignTacoController(IngredientRepository ingredientRepo) {
+		this.ingredientRepo = ingredientRepo;
+	}
 	/**
 	 * add ingredients to taco model.
 	 * model is the taco being desined.
@@ -31,22 +38,12 @@ public class DesignTacoController {
 	 */
 	@ModelAttribute
 	public void addIngridientToModel (Model model){
-		List<Ingredient> ingredients = Arrays.asList(
-				new Ingredient("FLTO", "Flour Tortilla", Ingredient.Type.WRAP),
-				new Ingredient("COTO", "Corn Tortilla", Ingredient.Type.WRAP),
-				new Ingredient("GRBF", "Ground Beef", Ingredient.Type.PROTEIN),
-				new Ingredient("CARN", "Carnitas", Ingredient.Type.PROTEIN),
-				new Ingredient("TMTO", "Diced Tomatoes", Ingredient.Type.VEGGIES),
-				new Ingredient("LETC", "Lettuce", Ingredient.Type.VEGGIES),
-				new Ingredient("CHED", "Cheddar", Ingredient.Type.CHEESE),
-				new Ingredient("JACK", "Monterrey Jack", Ingredient.Type.CHEESE),
-				new Ingredient("SLSA", "Salsa", Ingredient.Type.SAUCE),
-				new Ingredient("SRCR", "Sour Cream", Ingredient.Type.SAUCE)
-				);
+		Iterable<Ingredient> ingredients = ingredientRepo.findAll();
 		
 		Ingredient.Type[] types = Ingredient.Type.values();
 		for(Ingredient.Type elem : types) {
-			model.addAttribute(elem.toString().toLowerCase(), filterByType(ingredients, elem));
+			model.addAttribute(elem.toString().toLowerCase(),
+					filterByType((List<Ingredient>) ingredients, elem));
 		}
 	}
 	
