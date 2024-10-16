@@ -1,2 +1,10 @@
-spring.application.name=taco
-spring.thymeleaf.cache=false
+spring:
+  application:
+    name: taco
+    
+  thymeleaf:
+    cache: false
+    
+  datasource:
+    generate-unique-name: false
+    name: taco
